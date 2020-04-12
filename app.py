@@ -20,4 +20,4 @@ def not_found_404(e):
 def not_found_500(e): 
   return "500 please re-check your input"
 
-app.run("0.0.0.0","3000")
+app.run("0.0.0.0","8080")

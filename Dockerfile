@@ -3,5 +3,5 @@ COPY . /app
 WORKDIR /app
 RUN pip install flask
 RUN pip install -U flask_cors
-EXPOSE 3000
+EXPOSE 8080
 CMD ["python", "app.py"]
