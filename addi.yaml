@@ -1,0 +1,50 @@
+﻿##################################################################################################
+# addi service
+##################################################################################################
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: addi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: addi
+  labels:
+    app: addi
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: addi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: addi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: addi
+  template:
+    metadata:
+      labels:
+        app: addi
+    spec:
+      serviceAccountName: addi
+      containers:
+      - name: addi
+        image: image-registry.openshift-image-registry.svc:5000/addition/backend@sha256:74665a82e302e42f13a447a3bcafda2c9732a67526fa613e450791b9b58bb6c9
+        command: ["/bin/addi", "3650d"]
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /etc/addi/tls
+          name: secret-volume
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: addi-secret
+          optional: true
+---
